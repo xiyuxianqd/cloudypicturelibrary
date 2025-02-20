@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiyuxian.domain.PictureUploadRequest;
 import com.xiyuxian.domain.User;
 import com.xiyuxian.picture.PictureQueryRequest;
+import com.xiyuxian.picture.PictureReviewRequest;
 import com.xiyuxian.vo.PictureVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,18 +27,27 @@ public interface PictureService extends IService<Picture> {
      * @param loginUser
      * @return
      */
-    PictureVO uploadPicture(MultipartFile multipartFile,
+     PictureVO uploadPicture(MultipartFile multipartFile,
                             PictureUploadRequest pictureUploadRequest,
                             User loginUser);
 
 
-    public QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+     QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
 
 
-    public PictureVO getPictureVO(Picture picture, HttpServletRequest request);
+     PictureVO getPictureVO(Picture picture, HttpServletRequest request);
 
-    public Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
+     Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
 
-    public void validPicture(Picture picture);
+     void validPicture(Picture picture);
 
+    /**
+     * 图片审核
+     *
+     * @param pictureReviewRequest
+     * @param loginUser
+     */
+    void doPictureReview(PictureReviewRequest pictureReviewRequest, User loginUser);
+
+    void fillReviewParams(Picture picture, User loginUser);
 }
