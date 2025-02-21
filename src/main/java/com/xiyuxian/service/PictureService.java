@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiyuxian.domain.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xiyuxian.domain.PictureUploadRequest;
+import com.xiyuxian.picture.PictureEditRequest;
+import com.xiyuxian.picture.PictureUploadRequest;
 import com.xiyuxian.domain.User;
 import com.xiyuxian.picture.PictureQueryRequest;
 import com.xiyuxian.picture.PictureReviewRequest;
@@ -52,4 +53,16 @@ public interface PictureService extends IService<Picture> {
     void fillReviewParams(Picture picture, User loginUser);
 
     void clearPictureFile(Picture oldPicture);
+
+    void deletePicture(long pictureId, User loginUser);
+
+    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
+    /**
+     * 校验空间图片的权限
+     *
+     * @param loginUser
+     * @param picture
+     */
+    void checkPictureAuth(User loginUser, Picture picture);
+
 }
