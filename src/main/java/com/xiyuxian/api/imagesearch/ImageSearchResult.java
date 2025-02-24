@@ -1,4 +1,4 @@
-package com.xiyuxian.imagesearch.api;
+package com.xiyuxian.api.imagesearch;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.xiyuxian.imagesearch.sub;
+package com.xiyuxian.api.imagesearch.sub;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;

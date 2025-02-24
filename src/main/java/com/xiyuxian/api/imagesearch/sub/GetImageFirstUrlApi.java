@@ -1,4 +1,4 @@
-package com.xiyuxian.imagesearch.sub;
+package com.xiyuxian.api.imagesearch.sub;
 
 import com.xiyuxian.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;

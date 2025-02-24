@@ -1,9 +1,8 @@
-package com.xiyuxian.imagesearch;
+package com.xiyuxian.api.imagesearch;
 
-import com.xiyuxian.imagesearch.api.ImageSearchResult;
-import com.xiyuxian.imagesearch.sub.GetImageFirstUrlApi;
-import com.xiyuxian.imagesearch.sub.GetImageListApi;
-import com.xiyuxian.imagesearch.sub.GetImagePageUrlApi;
+import com.xiyuxian.api.imagesearch.sub.GetImageFirstUrlApi;
+import com.xiyuxian.api.imagesearch.sub.GetImageListApi;
+import com.xiyuxian.api.imagesearch.sub.GetImagePageUrlApi;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

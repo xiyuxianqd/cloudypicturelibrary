@@ -2,6 +2,7 @@ package com.xiyuxian.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xiyuxian.api.aliyunai.model.CreateOutPaintingTaskResponse;
 import com.xiyuxian.domain.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiyuxian.picture.*;
@@ -21,7 +22,7 @@ public interface PictureService extends IService<Picture> {
     /**
      * 上传图片
      *
-     * @param multipartFile=>改成object inputsource保证string和multipartfile都可以
+     * @param //multipartFile=>改成object inputsource保证string和multipartfile都可以
      * @param pictureUploadRequest
      * @param loginUser
      * @return
@@ -78,4 +79,7 @@ public interface PictureService extends IService<Picture> {
      List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
 
      void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
+
+    CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
+
 }

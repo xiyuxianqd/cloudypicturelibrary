@@ -1,19 +1,23 @@
 package com.xiyuxian.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.xiyuxian.annotation.AuthCheck;
+import com.xiyuxian.api.aliyunai.AliYunAiApi;
+import com.xiyuxian.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.xiyuxian.api.aliyunai.model.GetOutPaintingTaskResponse;
 import com.xiyuxian.common.BaseResponse;
 import com.xiyuxian.common.DeleteRequest;
 import com.xiyuxian.common.ResultUtils;
 import com.xiyuxian.constant.UserConstant;
 import com.xiyuxian.domain.Picture;
 import com.xiyuxian.domain.Space;
-import com.xiyuxian.imagesearch.ImageSearchApiFacade;
-import com.xiyuxian.imagesearch.api.ImageSearchResult;
+import com.xiyuxian.api.imagesearch.ImageSearchApiFacade;
+import com.xiyuxian.api.imagesearch.ImageSearchResult;
 import com.xiyuxian.picture.*;
 import com.xiyuxian.domain.User;
 import com.xiyuxian.domain.enums.PictureReviewStatusEnum;
@@ -37,7 +41,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,6 +58,8 @@ public class PictureController {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private AliYunAiApi aliYunAiApi;
 
 
     private final Cache<String, String> LOCAL_CACHE = Caffeine.newBuilder()
@@ -314,7 +319,8 @@ public class PictureController {
         ThrowUtils.throwIf(pictureId == null || pictureId <= 0, ErrorCode.PARAMS_ERROR);
         Picture oldPicture = pictureService.getById(pictureId);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        List<ImageSearchResult> resultList = ImageSearchApiFacade.searchImage(oldPicture.getUrl());
+        String url = oldPicture.getUrl()+"?imageMogr2/format/png";
+        List<ImageSearchResult> resultList = ImageSearchApiFacade.searchImage(url);
         return ResultUtils.success(resultList);
     }
     @PostMapping("/upload/batch")
@@ -346,5 +352,29 @@ public class PictureController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 创建 AI 扩图任务
+     */
+    @PostMapping("/out_painting/create_task")
+    public BaseResponse<CreateOutPaintingTaskResponse> createPictureOutPaintingTask(
+            @RequestBody CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest,
+            HttpServletRequest request) {
+        if (createPictureOutPaintingTaskRequest == null || createPictureOutPaintingTaskRequest.getPictureId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        CreateOutPaintingTaskResponse response = pictureService.createPictureOutPaintingTask(createPictureOutPaintingTaskRequest, loginUser);
+        return ResultUtils.success(response);
+    }
+
+    /**
+     * 查询 AI 扩图任务
+     */
+    @GetMapping("/out_painting/get_task")
+    public BaseResponse<GetOutPaintingTaskResponse> getPictureOutPaintingTask(String taskId) {
+        ThrowUtils.throwIf(StrUtil.isBlank(taskId), ErrorCode.PARAMS_ERROR);
+        GetOutPaintingTaskResponse task = aliYunAiApi.getOutPaintingTask(taskId);
+        return ResultUtils.success(task);
+    }
 
 }

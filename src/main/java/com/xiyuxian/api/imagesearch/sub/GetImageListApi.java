@@ -1,4 +1,4 @@
-package com.xiyuxian.imagesearch.sub;
+package com.xiyuxian.api.imagesearch.sub;
 
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -6,7 +6,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.xiyuxian.exception.BusinessException;
-import com.xiyuxian.imagesearch.api.ImageSearchResult;
+import com.xiyuxian.api.imagesearch.ImageSearchResult;
 import lombok.extern.slf4j.Slf4j;
 import com.xiyuxian.exception.ErrorCode;
 
