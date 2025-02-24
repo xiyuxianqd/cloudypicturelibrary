@@ -199,7 +199,12 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
             }
         }
     }
-
+    /**
+     * 空间权限校验
+     *
+     * @param loginUser
+     * @param space
+     */
     @Override
     public void checkSpaceAuth(User loginUser, Space space) {
         // 仅本人或管理员可编辑
