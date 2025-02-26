@@ -74,6 +74,12 @@ public class Space {
     @TableLogic
     private Integer isDelete;
 
+    /**
+     * 空间类型：0-私有 1-团队
+     */
+    private Integer spaceType;
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -121,9 +121,10 @@ public class SpaceAnalyzeServiceimpl extends ServiceImpl<SpaceMapper, Space>
             Space space = spaceService.getById(spaceId);
             ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR, "空间不存在");
 
-            // 权限校验：仅空间所有者或管理员可访问
-            spaceService.checkSpaceAuth(loginUser, space);
-
+//            // 权限校验：仅空间所有者或管理员可访问
+//            spaceService.checkSpaceAuth(loginUser, space);
+            // 权限校验，仅管理员可以访问
+            checkSpaceAnalyzeAuth(spaceUsageAnalyzeRequest, loginUser);
             // 构造返回结果
             SpaceUsageAnalyzeResponse response = new SpaceUsageAnalyzeResponse();
             response.setUsedSize(space.getTotalSize());

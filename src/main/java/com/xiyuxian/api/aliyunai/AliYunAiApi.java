@@ -36,7 +36,7 @@ public class AliYunAiApi {
      */
     public CreateOutPaintingTaskResponse createOutPaintingTask(CreateOutPaintingTaskRequest createOutPaintingTaskRequest) {
         if (createOutPaintingTaskRequest == null) {
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "扩图参数为空");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "扩图参数为空");
         }
         // 发送请求
         HttpRequest httpRequest = HttpRequest.post(CREATE_OUT_PAINTING_TASK_URL)
@@ -48,14 +48,14 @@ public class AliYunAiApi {
         try (HttpResponse httpResponse = httpRequest.execute()) {
             if (!httpResponse.isOk()) {
                 log.error("请求异常：{}", httpResponse.body());
-                throw new BusinessException(ErrorCode.OPERATTION_ERROR, "AI 扩图失败");
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI 扩图失败");
             }
             CreateOutPaintingTaskResponse response = JSONUtil.toBean(httpResponse.body(), CreateOutPaintingTaskResponse.class);
             String errorCode = response.getCode();
             if (StrUtil.isNotBlank(errorCode)) {
                 String errorMessage = response.getMessage();
                 log.error("AI 扩图失败，errorCode:{}, errorMessage:{}", errorCode, errorMessage);
-                throw new BusinessException(ErrorCode.OPERATTION_ERROR, "AI 扩图接口响应异常");
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "AI 扩图接口响应异常");
             }
             return response;
         }
@@ -69,13 +69,13 @@ public class AliYunAiApi {
      */
     public GetOutPaintingTaskResponse getOutPaintingTask(String taskId) {
         if (StrUtil.isBlank(taskId)) {
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "任务 id 不能为空");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "任务 id 不能为空");
         }
         try (HttpResponse httpResponse = HttpRequest.get(String.format(GET_OUT_PAINTING_TASK_URL, taskId))
                 .header(Header.AUTHORIZATION, "Bearer " + apiKey)
                 .execute()) {
             if (!httpResponse.isOk()) {
-                throw new BusinessException(ErrorCode.OPERATTION_ERROR, "获取任务失败");
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "获取任务失败");
             }
             return JSONUtil.toBean(httpResponse.body(), GetOutPaintingTaskResponse.class);
         }

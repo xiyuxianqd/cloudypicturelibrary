@@ -46,10 +46,10 @@ public class GetImageFirstUrlApi {
                 }
             }
 
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "未找到 url");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "未找到 url");
         } catch (Exception e) {
             log.error("搜索失败", e);
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "搜索失败");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "搜索失败");
         }
     }
 

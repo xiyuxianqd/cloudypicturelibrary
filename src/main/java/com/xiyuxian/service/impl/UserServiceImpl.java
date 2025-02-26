@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiyuxian.auth.StpKit;
 import com.xiyuxian.vo.LoginUserVO;
 import com.xiyuxian.domain.User;
 import com.xiyuxian.domain.enums.UserRoleEnum;
@@ -107,7 +108,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 3. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // 4. 记录用户登录态到 Sa-token，便于空间鉴权时使用，注意保证该用户信息与 SpringSession 中的信息过期时间一致
+        StpKit.SPACE.login(user.getId());
+        StpKit.SPACE.getSession().set(USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
+
     }
 
 
@@ -144,7 +149,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 先判断是否已登录
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (userObj == null) {
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "未登录");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
         }
         // 移除登录态
         request.getSession().removeAttribute(USER_LOGIN_STATE);

@@ -12,6 +12,7 @@ import com.xiyuxian.domain.enums.SpaceLevelEnum;
 import com.xiyuxian.exception.BusinessException;
 import com.xiyuxian.exception.ErrorCode;
 import com.xiyuxian.exception.ThrowUtils;
+import com.xiyuxian.manager.auth.SpaceUserAuthManager;
 import com.xiyuxian.service.SpaceService;
 import com.xiyuxian.service.UserService;
 import com.xiyuxian.space.*;
@@ -38,7 +39,8 @@ public class SpaceController {
     @Resource
     SpaceService spaceService;
 
-    //@Resource
+    @Resource
+    SpaceUserAuthManager spaceUserAuthManager;
 
     @PostMapping("/add")
     public BaseResponse<Long> addSpace(@RequestBody SpaceAddRequest spaceAddRequest, HttpServletRequest request) {
@@ -63,7 +65,7 @@ public class SpaceController {
         spaceService.checkSpaceAuth(loginUser, oldSpace);
         // 操作数据库
         boolean result = spaceService.removeById(id);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
 
@@ -93,7 +95,7 @@ public class SpaceController {
         ThrowUtils.throwIf(oldSpace == null, ErrorCode.NOT_FOUND_ERROR);
         // 操作数据库
         boolean result = spaceService.updateById(space);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
 
@@ -123,8 +125,9 @@ public class SpaceController {
         ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR);
         SpaceVO spaceVO = spaceService.getSpaceVO(space, request);
         User loginUser = userService.getLoginUser(request);
-        //List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
-        //spaceVO.setPermissionList(permissionList);
+        //获取权限
+        List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
+        spaceVO.setPermissionList(permissionList);
         // 获取封装类
         return ResultUtils.success(spaceVO);
     }
@@ -186,7 +189,7 @@ public class SpaceController {
         spaceService.checkSpaceAuth(loginUser, oldSpace);
         // 操作数据库
         boolean result = spaceService.updateById(space);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
 

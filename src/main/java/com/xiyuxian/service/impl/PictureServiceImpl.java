@@ -101,10 +101,10 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             }
             // 校验额度
             if (space.getTotalCount() >= space.getMaxCount()) {
-                throw new BusinessException(ErrorCode.OPERATTION_ERROR, "空间条数不足");
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "空间条数不足");
             }
             if (space.getTotalSize() >= space.getMaxSize()) {
-                throw new BusinessException(ErrorCode.OPERATTION_ERROR, "空间大小不足");
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "空间大小不足");
             }
         }
 
@@ -205,7 +205,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             picture.setEditTime(new Date());
         }
         // boolean result = this.saveOrUpdate(picture);
-        // ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR, "图片上传失败");
+        // ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "图片上传失败");
 
 
         // 开启事务(基于transactionTemplate来写)
@@ -213,7 +213,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         transactionTemplate.execute(status -> {
             // 插入数据
             boolean result = this.saveOrUpdate(picture);
-            ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR, "图片上传失败，数据库操作失败");
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "图片上传失败，数据库操作失败");
             if (finalSpaceId != null) {
                 // 更新空间的使用额度
                 boolean update = spaceService.lambdaUpdate()
@@ -221,7 +221,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
                         .setSql("totalSize = totalSize + " + picture.getPicSize())
                         .setSql("totalCount = totalCount + 1")
                         .update();
-                ThrowUtils.throwIf(!update, ErrorCode.OPERATTION_ERROR, "额度更新失败");
+                ThrowUtils.throwIf(!update, ErrorCode.OPERATION_ERROR, "额度更新失败");
             }
             return picture;
         });
@@ -246,11 +246,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             document = Jsoup.connect(fetchUrl).get();//连接页面，获取文档
         } catch (IOException e) {
             log.error("获取页面失败", e);
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "获取页面失败");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "获取页面失败");
         }
         Element div = document.getElementsByClass("dgControl").first();
         if (ObjUtil.isNull(div)) {
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "获取元素失败");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "获取元素失败");
         }
         Elements imgElementList = div.select("img.mimg");//获取元素列表
         int uploadCount = 0;
@@ -373,7 +373,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         fillPictureWithNameRule(pictureList, nameRule);
         // 5. 批量更新
         boolean result = this.updateBatchById(pictureList);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
     }
 
     @Override
@@ -383,7 +383,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         Picture picture = Optional.ofNullable(this.getById(pictureId))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
         // 权限校验
-        checkPictureAuth(loginUser, picture);
+        //checkPictureAuth(loginUser, picture);
         // 构造请求参数
         CreateOutPaintingTaskRequest taskRequest = new CreateOutPaintingTaskRequest();
         CreateOutPaintingTaskRequest.Input input = new CreateOutPaintingTaskRequest.Input();
@@ -413,7 +413,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             }
         } catch (Exception e) {
             log.error("名称解析错误", e);
-            throw new BusinessException(ErrorCode.OPERATTION_ERROR, "名称解析错误");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "名称解析错误");
         }
     }
 
@@ -563,7 +563,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         updatePicture.setReviewerId(loginUser.getId());
         updatePicture.setReviewTime(new Date());
         boolean result = this.updateById(updatePicture);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
     }
 
     @Override
@@ -608,13 +608,13 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 判断是否存在
         Picture oldPicture = this.getById(pictureId);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        // 校验权限
-        checkPictureAuth(loginUser, oldPicture);
+//        // 校验权限
+//        checkPictureAuth(loginUser, oldPicture);
         // 开启事务
         transactionTemplate.execute(status -> {
             // 操作数据库
             boolean result = this.removeById(pictureId);
-            ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
             // 释放额度
             Long spaceId = oldPicture.getSpaceId();
             if (spaceId != null) {
@@ -623,7 +623,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
                         .setSql("totalSize = totalSize - " + oldPicture.getPicSize())
                         .setSql("totalCount = totalCount - 1")
                         .update();
-                ThrowUtils.throwIf(!update, ErrorCode.OPERATTION_ERROR, "额度更新失败");
+                ThrowUtils.throwIf(!update, ErrorCode.OPERATION_ERROR, "额度更新失败");
             }
             return true;
         });
@@ -647,13 +647,13 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         long id = pictureEditRequest.getId();
         Picture oldPicture = this.getById(id);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        // 校验权限
-        checkPictureAuth(loginUser, oldPicture);
+//        // 校验权限
+//        checkPictureAuth(loginUser, oldPicture);
         // 补充审核参数
         this.fillReviewParams(picture, loginUser);
         // 操作数据库
         boolean result = this.updateById(picture);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATTION_ERROR);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
     }
 
 
