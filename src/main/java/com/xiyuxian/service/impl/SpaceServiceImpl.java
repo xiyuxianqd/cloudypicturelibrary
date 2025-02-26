@@ -15,6 +15,7 @@ import com.xiyuxian.domain.enums.SpaceTypeEnum;
 import com.xiyuxian.exception.BusinessException;
 import com.xiyuxian.exception.ErrorCode;
 import com.xiyuxian.exception.ThrowUtils;
+import com.xiyuxian.manager.sharding.DynamicShardingManager;
 import com.xiyuxian.service.SpaceService;
 import com.xiyuxian.mapper.SpaceMapper;
 import com.xiyuxian.service.SpaceUserService;
@@ -23,7 +24,9 @@ import com.xiyuxian.space.SpaceAddRequest;
 import com.xiyuxian.space.SpaceQueryRequest;
 import com.xiyuxian.vo.SpaceVO;
 import com.xiyuxian.vo.UserVO;
+
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -53,9 +56,9 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
     @Resource
     private TransactionTemplate transactionTemplate;
 //
-//        @Resource
-//        @Lazy
-      //  private DynamicShardingManager dynamicShardingManager;
+        @Resource
+        @Lazy
+        private DynamicShardingManager dynamicShardingManager;
 
 
     @Override
@@ -118,9 +121,9 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                     ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "创建团队成员记录失败");
                 }
 
-                // 创建分表
-              //  dynamicShardingManager.createSpacePictureTable(space);
-// 返回新写入的数据 id
+                  //创建分表
+                  dynamicShardingManager.createSpacePictureTable(space);
+                // 返回新写入的数据 id
                 return space.getId();
             });
             // 返回结果是包装类，可以做一些处理

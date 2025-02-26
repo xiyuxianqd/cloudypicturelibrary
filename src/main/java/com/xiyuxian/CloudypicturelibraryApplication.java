@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @MapperScan("com.xiyuxian.mapper")
 @EnableAspectJAutoProxy(exposeProxy = true)
+
 public class CloudypicturelibraryApplication {
 
     public static void main(String[] args) {
