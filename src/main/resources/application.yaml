@@ -52,5 +52,5 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.xiyuxian.controller
+          - com.xiyuxian.picturecloudy.controller
 
