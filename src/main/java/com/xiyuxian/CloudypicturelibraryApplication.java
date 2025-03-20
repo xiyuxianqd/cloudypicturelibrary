@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-@MapperScan("com.xiyuxian.mapper")
+@MapperScan("com.xiyuxian.picturecloudy.infrastructure.mapper")
 @EnableAspectJAutoProxy(exposeProxy = true)
 
 public class CloudypicturelibraryApplication {
