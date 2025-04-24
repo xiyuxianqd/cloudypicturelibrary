@@ -10,6 +10,8 @@ import com.xiyuxian.picturecloudy.domain.picture.entity.Picture;
 import com.xiyuxian.picturecloudy.domain.picture.service.PictureDomainService;
 import com.xiyuxian.picturecloudy.domain.user.entity.User;
 import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskRequest;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskResponse;
 import com.xiyuxian.picturecloudy.infrastructure.exception.BusinessException;
 import com.xiyuxian.picturecloudy.infrastructure.exception.ErrorCode;
 import com.xiyuxian.picturecloudy.infrastructure.mapper.PictureMapper;
@@ -162,6 +164,13 @@ public class PictureApplicationServiceImpl extends ServiceImpl<PictureMapper, Pi
     public CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser) {
         return pictureDomainService.createPictureOutPaintingTask(createPictureOutPaintingTaskRequest, loginUser);
     }
+
+    @Override
+    public CreateTextTaskResponse createTextTask(CreateTextTaskRequest Request, User loginUser) {
+        return pictureDomainService.createTextTask(Request,loginUser);
+        // 问题：参数名不规范(Request应该是小写开头)
+    }
+
 
 
 }

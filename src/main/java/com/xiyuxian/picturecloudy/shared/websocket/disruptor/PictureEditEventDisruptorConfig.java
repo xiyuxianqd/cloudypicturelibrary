@@ -13,7 +13,7 @@ public class PictureEditEventDisruptorConfig {
     @Resource
     private PictureEditEventWorkHandler pictureEditEventWorkHandler;
 
-    @Bean("pictureEditEventDisruptor")
+    @Bean("pictureEditEventDisruptor")       //这里为什么要用bean注解，交给spring管理为什么
     public Disruptor<PictureEditEvent> messageModelRingBuffer() {
         // ringBuffer 的大小
         int bufferSize = 1024 * 256;

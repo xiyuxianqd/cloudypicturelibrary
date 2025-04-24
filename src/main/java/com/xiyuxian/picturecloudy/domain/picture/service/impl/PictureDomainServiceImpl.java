@@ -15,8 +15,11 @@ import com.xiyuxian.picturecloudy.domain.space.entity.Space;
 import com.xiyuxian.picturecloudy.domain.user.entity.User;
 import com.xiyuxian.picturecloudy.infrastructure.api.CosApi;
 import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.AliYunAiApi;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.TextTestApi;
 import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateOutPaintingTaskRequest;
 import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskRequest;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskResponse;
 import com.xiyuxian.picturecloudy.infrastructure.exception.BusinessException;
 import com.xiyuxian.picturecloudy.infrastructure.exception.ErrorCode;
 import com.xiyuxian.picturecloudy.infrastructure.exception.ThrowUtils;
@@ -79,6 +82,8 @@ public class PictureDomainServiceImpl extends ServiceImpl<PictureMapper, Picture
 
     @Resource
     private AliYunAiApi aliYunAiApi;
+    @Resource
+    private  TextTestApi textTestApi;
 
     @Override
     public PictureVO uploadPicture(Object inputSource, PictureUploadRequest pictureUploadRequest, User loginUser) {
@@ -401,6 +406,15 @@ public class PictureDomainServiceImpl extends ServiceImpl<PictureMapper, Picture
         taskRequest.setParameters(createPictureOutPaintingTaskRequest.getParameters());
         // 创建任务
         return aliYunAiApi.createOutPaintingTask(taskRequest);
+    }
+
+    @Override
+    public CreateTextTaskResponse createTextTask(CreateTextTaskRequest request, User loginUser) {
+        // 领域层关注业务规则和核心逻辑
+        // 这里可以添加一些业务规则验证
+
+        // 调用基础设施层API
+        return textTestApi.createTextTask(request);
     }
 
 

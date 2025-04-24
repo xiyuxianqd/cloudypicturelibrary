@@ -6,7 +6,6 @@
     <artifactId>cloudypicturelibrary</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-
     <name>cloudypicturelibrary</name>
     <description>cloudypicturelibrary</description>
 
@@ -160,8 +159,11 @@
             <scope>test</scope>
         </dependency>
 
-
-
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.dashscope</groupId>-->
+<!--            <artifactId>dashscope-sdk-java</artifactId>-->
+<!--            <version>2.18.2</version>-->
+<!--        </dependency>-->
 
     </dependencies>
     <dependencyManagement>
@@ -201,7 +203,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.xiyuxian.CloudypicturelibraryApplication</mainClass>
-                    <skip>true</skip>
+<!--                    <skip>true</skip>-->
                 </configuration>
                 <executions>
                     <execution>

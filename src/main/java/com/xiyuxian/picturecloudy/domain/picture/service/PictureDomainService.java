@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiyuxian.picturecloudy.domain.picture.entity.Picture;
 import com.xiyuxian.picturecloudy.domain.user.entity.User;
 import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateOutPaintingTaskResponse;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskRequest;
+import com.xiyuxian.picturecloudy.infrastructure.api.aliyunai.model.CreateTextTaskResponse;
 import com.xiyuxian.picturecloudy.interfaces.dto.picture.*;
 import com.xiyuxian.picturecloudy.interfaces.vo.picture.PictureVO;
 
@@ -131,5 +133,15 @@ public interface PictureDomainService extends IService<Picture> {
      * @param loginUser
      */
     CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
+
+
+    /**
+     * 创建文本任务
+     *
+     * @param createTextTaskRequest
+     * @param loginUser
+     */
+    CreateTextTaskResponse createTextTask(CreateTextTaskRequest Request, User loginUser);
+
 
 }
